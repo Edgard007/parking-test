@@ -2,8 +2,6 @@ import { Module } from '@nestjs/common';
 import { ParkingService } from './parking.service';
 import { ParkingController } from './parking.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-
-// ==> Entity
 import { Parking, ParkingSchema } from './entities/parking.entity';
 
 @Module({
@@ -17,5 +15,6 @@ import { Parking, ParkingSchema } from './entities/parking.entity';
       },
     ]),
   ],
+  exports: [MongooseModule],
 })
 export class ParkingModule {}

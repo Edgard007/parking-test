@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { join } from 'path';
 
 // ==> Modules
 import { ParkingModule } from './parking/parking.module';
