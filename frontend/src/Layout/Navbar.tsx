@@ -45,13 +45,12 @@ const Wrapper = styled.div`
   position: relative;
   top: 0;
   z-index: 2;
-  padding: 0 50px;
   width: 100%;
   height: 40px;
   background-color: #ffff;
   box-shadow: 0 2px 5px rgb(0 48 136 / 20%);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 
   @media (max-width: 740px) {
