@@ -1,12 +1,9 @@
-export interface ParkingResponse {
-  numPlaca: string;
-  startDate: string;
-  endDate: string;
-  _id: string;
-}
-
 export interface ParkingRequest {
   numPlaca: string;
   startDate: string;
   endDate?: string;
+}
+
+export interface ParkingResponse extends ParkingRequest {
+  _id: string;
 }

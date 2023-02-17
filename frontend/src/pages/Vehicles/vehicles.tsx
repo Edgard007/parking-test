@@ -6,12 +6,12 @@ import Loading from "../../components/Loading";
 import CustomTable from "../../components/Table";
 
 // ==> Interfaces
-import { OfficialVehiclesResponse } from "../../interfaces/officialVehicles.interface";
+import { VehiclesResponse } from "../../interfaces/vehicles.interface";
 
 // ==> Actions
-import { getOfficialVehicles } from "../../store/actions/officialVehicles.action";
+import { getVehicles } from "../../store/actions/vehicles.action";
 
-const OfficialVehicles = () => {
+const Vehicles = () => {
   //* ==> STATES <== *//
   const [loading, setLoading] = useState(false);
 
@@ -42,10 +42,10 @@ const OfficialVehicles = () => {
   const get = async () => {
     setLoading(true); // ==> Show loading
     try {
-      const officialVehicles = await getOfficialVehicles();
-      setRecords(officialVehicles || []);
+      const vehicles = await getVehicles();
+      setRecords(vehicles || []);
     } catch (e) {
-      console.error("||* ==> Error getOfficialVehicles <== *||", e);
+      console.error("||* ==> Error getVehicles <== *||", e);
     }
     setLoading(false); // ==> Hide loading
   };
@@ -88,4 +88,4 @@ const Wrapper = styled.div`
     }
   }
 `;
-export default OfficialVehicles;
+export default Vehicles;
