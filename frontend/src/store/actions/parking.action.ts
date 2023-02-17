@@ -43,6 +43,30 @@ export const getParking = async () => {
 };
 
 /**
+ * Method to obtain a parking by param
+ */
+export const getOneParking = async (term: string) => {
+  try {
+    const result = await requestApi<ParkingResponse>({
+      path: parking,
+      concatUrl: term,
+    });
+
+    const { ok, msg, data } = result;
+    if (ok) return { ok, data };
+    else return { ok, msg };
+  } catch (e) {
+    console.error("||* ==> Error getOneParking <== *||", e);
+    alertNotification({
+      msm: "Error",
+      description: "Error al obtener registro",
+      type: "error",
+    });
+    return { ok: false };
+  }
+};
+
+/**
  * Method for saving a new record
  */
 export const saveParking = async (body: ParkingRequest) => {

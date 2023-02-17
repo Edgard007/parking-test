@@ -3,7 +3,7 @@ export const decimalFormat = (num: string) => {
     .toFixed(2)
     .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
 
-  return amount === "NaN" ? "0.00" : `$${amount}`;
+  return amount === "NaN" ? "$0.00" : `$${amount}`;
 };
 
 export const onlyFloat = (e: any, setState: (amount: string) => void) => {

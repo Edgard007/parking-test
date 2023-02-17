@@ -20,6 +20,7 @@ import { getParking, updateParking } from "../../store/actions/parking.action";
 
 // ==> Helpers
 import { alertNotification } from "../../helpers/notifications";
+import { decimalFormat } from "../../helpers/helper";
 
 const { useModal } = ModalANTD;
 
@@ -58,6 +59,13 @@ const Parking = () => {
       align: "center",
       with: 300,
       render: (txt: string) => <> {txt || "SIN SALIDA"} </>,
+    },
+    {
+      title: "Importe",
+      dataIndex: "amouont",
+      align: "center",
+      with: 150,
+      render: (txt: string) => <> {decimalFormat(txt)} </>,
     },
     {
       title: "Registra salida",

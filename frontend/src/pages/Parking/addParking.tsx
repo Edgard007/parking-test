@@ -43,10 +43,11 @@ const AddParkings = (props: Props) => {
     if (ok) {
       initialState();
       onOk && onOk();
-    } else
+    } else {
       setError(
         typeof msg === "string" && msg ? msg : "Error al guardar información"
       );
+    }
 
     setLoading(false); // ==> Hide loading
   };
