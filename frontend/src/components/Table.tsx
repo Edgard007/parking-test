@@ -27,6 +27,12 @@ const CustomTable = ({
   return (
     <Wrapper>
       <Table
+        locale={{
+          triggerDesc: "Ver descendente",
+          triggerAsc: "Ver Ascendente",
+          cancelSort: "Cancelar",
+          emptyText: "No se encontraron resultados",
+        }}
         loading={loading}
         columns={columns}
         dataSource={data}
@@ -40,7 +46,7 @@ const CustomTable = ({
               }
             : false
         }
-        rowKey={(record: any) => record?.id || ""}
+        rowKey={(record: any) => record?.id || record?._id || ""}
       />
     </Wrapper>
   );
@@ -122,6 +128,11 @@ const Wrapper = styled.div`
   .ant-pagination.mini > li,
   .custom-item-paginator {
     border: 1px solid var(--color-gray) !important;
+  }
+
+  .ant-table-column-sorter-up.active,
+  .ant-table-column-sorter-down.active {
+    color: var(--color-primary) !important;
   }
 `;
 
