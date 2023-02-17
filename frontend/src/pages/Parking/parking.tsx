@@ -62,7 +62,7 @@ const Parking = () => {
     },
     {
       title: "Importe",
-      dataIndex: "amouont",
+      dataIndex: "amount",
       align: "center",
       with: 150,
       render: (txt: string) => <> {decimalFormat(txt)} </>,
