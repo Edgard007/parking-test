@@ -2,21 +2,21 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 // ==> Components
-import Loading from "../components/Loading";
-import CustomTable from "../components/Table";
+import Loading from "../../components/Loading";
+import CustomTable from "../../components/Table";
 
 // ==> Interfaces
-import { ParkingResponse } from "../interfaces/parking.interface";
+import { OfficialVehiclesResponse } from "../../interfaces/officialVehicles.interface";
 
 // ==> Actions
-import { getParking } from "../store/actions/parking.action";
+import { getOfficialVehicles } from "../../store/actions/officialVehicles.action";
 
-const Parking = () => {
+const OfficialVehicles = () => {
   //* ==> STATES <== *//
   const [loading, setLoading] = useState(false);
 
   // ==> For the storage of arrays
-  const [records, setRecords] = useState<ParkingResponse[]>();
+  const [records, setRecords] = useState<object[]>([]);
 
   const columns = [
     {
@@ -27,13 +27,7 @@ const Parking = () => {
     },
     {
       title: "Fecha de ingreso",
-      dataIndex: "startDate",
-      align: "center",
-      with: 300,
-    },
-    {
-      title: "Fecha de salida",
-      dataIndex: "endDate",
+      dataIndex: "entryDate",
       align: "center",
       with: 300,
     },
@@ -48,10 +42,10 @@ const Parking = () => {
   const get = async () => {
     setLoading(true); // ==> Show loading
     try {
-      const parking = await getParking();
-      setRecords(parking || []);
+      const officialVehicles = await getOfficialVehicles();
+      setRecords(officialVehicles || []);
     } catch (e) {
-      console.error("||* ==> Error getParking <== *||", e);
+      console.error("||* ==> Error getOfficialVehicles <== *||", e);
     }
     setLoading(false); // ==> Hide loading
   };
@@ -69,9 +63,9 @@ const Parking = () => {
       ) : (
         <Wrapper>
           <div className="title">
-            <h1> Registros de ingreso </h1>
+            <h1> Vehiculos oficiales </h1>
           </div>
-          <CustomTable columns={columns} data={[]} loading={false} />
+          <CustomTable columns={columns} data={records} loading={false} />
         </Wrapper>
       )}
     </>
@@ -94,4 +88,4 @@ const Wrapper = styled.div`
     }
   }
 `;
-export default Parking;
+export default OfficialVehicles;

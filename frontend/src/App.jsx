@@ -8,8 +8,8 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 import Loading from "./components/Loading";
 
 // ==> Pages
-const Parking = lazy(() => import("./pages/parking"));
-const OfficialVehicles = lazy(() => import("./pages/officialVehicles"));
+const Parking = lazy(() => import("./pages/Parking/parking"));
+const Vehicles = lazy(() => import("./pages/Vehicles/Vehicles"));
 const Error403 = lazy(() => import("./pages/Error/error403"));
 
 function App() {
@@ -19,8 +19,8 @@ function App() {
       element: <Parking />,
     },
     {
-      path: "/officialVehicles",
-      element: <OfficialVehicles />,
+      path: "/Vehicles",
+      element: <Vehicles />,
     },
     {
       path: "*",

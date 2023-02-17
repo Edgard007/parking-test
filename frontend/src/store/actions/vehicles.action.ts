@@ -2,21 +2,21 @@
 import { requestApi } from "../../config/useDataApi";
 
 //* ==> Paths <== *//
-import { officialVehicles } from "../../config/paths";
+import { vehicles } from "../../config/paths";
 
 // ==> Helpers
 import { alertNotification } from "../../helpers/notifications";
 
 // ==> Interfaces
-import { OfficialVehiclesResponse } from "../../interfaces/officialVehicles.interface";
+import { VehiclesResponse } from "../../interfaces/vehicles.interface";
 
 /**
- * Method to obtain list of official vehicles
+ * Method to obtain list of vehicles
  */
-export const getOfficialVehicles = async () => {
+export const getVehicles = async () => {
   try {
-    const result = await requestApi<OfficialVehiclesResponse[]>({
-      path: officialVehicles,
+    const result = await requestApi<VehiclesResponse[]>({
+      path: vehicles,
     });
     const { ok, data } = result;
     if (ok) return data || [];
@@ -29,7 +29,7 @@ export const getOfficialVehicles = async () => {
       return [];
     }
   } catch (e) {
-    console.error("||* ==> Error getOfficialVehicles <== *||", e);
+    console.error("||* ==> Error getVehicles <== *||", e);
     alertNotification({
       msm: "Error",
       description: "Error al obtener registros",

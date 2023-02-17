@@ -12,7 +12,9 @@ interface Props {
  * @param {string} description Text to display
  * @param {'success' | 'info' | 'warning' | 'error'} [type] Alert type
  */
-const alertNotification = ({ msm, description, type }: Props) => {
+const alertNotification = (props: Props) => {
+  const { msm, description, type } = props;
+
   const defaultDesc =
     "An error has arisen, we are working to fix it. Please try again later.";
   const content = description ? description : defaultDesc;

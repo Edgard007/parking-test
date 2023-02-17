@@ -8,7 +8,10 @@ import { parking } from "../../config/paths";
 import { alertNotification } from "../../helpers/notifications";
 
 // ==> Interfaces
-import { ParkingResponse } from "../../interfaces/parking.interface";
+import {
+  ParkingRequest,
+  ParkingResponse,
+} from "../../interfaces/parking.interface";
 
 /**
  * Method to obtain list of parking
@@ -23,7 +26,7 @@ export const getParking = async () => {
     else {
       alertNotification({
         msm: "Error",
-        description: "Error al obtener registros",
+        description: "",
         type: "error",
       });
       return [];
@@ -36,5 +39,54 @@ export const getParking = async () => {
       type: "error",
     });
     return [];
+  }
+};
+
+/**
+ * Method for update a record
+ */
+export const saveParking = async (body: ParkingRequest) => {
+  try {
+    const result = await requestApi<ParkingResponse[]>({
+      path: parking,
+      method: "POST",
+      body: body,
+    });
+    const { ok, msg } = result;
+    if (ok) return { ok };
+    else return { ok, msg };
+  } catch (e) {
+    console.error("||* ==> Error <== *||", e);
+    alertNotification({
+      msm: "Error",
+      description: "Error al guardar registro",
+      type: "error",
+    });
+    return { ok: false };
+  }
+};
+
+/**
+ * Method for saving a new record
+ */
+export const updateParking = async (_id: string, body: ParkingRequest) => {
+  try {
+    const result = await requestApi<ParkingResponse[]>({
+      path: parking,
+      method: "PATCH",
+      body: body,
+      concatUrl: _id,
+    });
+    const { ok, msg } = result;
+    if (ok) return { ok };
+    else return { ok, msg };
+  } catch (e) {
+    console.error("||* ==> Error <== *||", e);
+    alertNotification({
+      msm: "Error",
+      description: "Error al modificar registro",
+      type: "error",
+    });
+    return { ok: false };
   }
 };
