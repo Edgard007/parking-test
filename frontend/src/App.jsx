@@ -6,6 +6,7 @@ import { GlobalStyles } from "./styles/GlobalStyles";
 
 // ==> Components
 import Loading from "./components/Loading";
+import Navbar from "./Layout/Navbar";
 
 // ==> Pages
 const Parking = lazy(() => import("./pages/Parking/parking"));
@@ -18,14 +19,17 @@ function App() {
     {
       path: "/",
       element: <Parking />,
+      name: "Estacionamiento",
     },
     {
       path: "/TypeVehicles",
       element: <TypeVehicles />,
+      name: "Tipo de Vehiculos",
     },
     {
       path: "/Vehicles",
       element: <Vehicles />,
+      name: "Vehiculos",
     },
     {
       path: "*",
@@ -37,6 +41,7 @@ function App() {
     <>
       <Suspense fallback={<Loading />}>
         <GlobalStyles />
+        <Navbar />
         <RouterProvider router={router} />
       </Suspense>
     </>
