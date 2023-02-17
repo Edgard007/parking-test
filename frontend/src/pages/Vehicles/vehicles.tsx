@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import moment from "moment";
-import { Tooltip } from "antd";
+import { Modal as ModalANTD, Tooltip } from "antd";
 
 // ==> Components
 import Loading from "../../components/Loading";
@@ -14,13 +14,20 @@ import { VehiclesResponse } from "../../interfaces/vehicles.interface";
 import { TypeVehicleResponse } from "../../interfaces/type-vehicle";
 
 // ==> Actions
-import { getVehicles } from "../../store/actions/vehicles.action";
+import {
+  getVehicles,
+  deleteVehicle,
+} from "../../store/actions/vehicles.action";
 import { getTypeVehicles } from "../../store/actions/type-vehicles.action";
 
 // ==> Helpers
 import { alertNotification } from "../../helpers/notifications";
 
+const { useModal } = ModalANTD;
+
 const Vehicles = () => {
+  const [modal, contextHolder] = useModal();
+
   //* ==> STATES <== *//
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -72,18 +79,28 @@ const Vehicles = () => {
       align: "center",
       with: 100,
       render: (txt: string, record: VehiclesResponse) => (
-        <Tooltip title="Seleccione registro">
-          <img
-            src="src/assets/icons/edit.png"
-            alt={txt}
-            className="iconTable"
-            onClick={() => {
-              setSelected(record);
-              setIsUpdate(true);
-              setShowModal(true);
-            }}
-          />
-        </Tooltip>
+        <>
+          <Tooltip title="Seleccione registro">
+            <img
+              src="src/assets/icons/edit.png"
+              alt={txt}
+              className="iconTable"
+              onClick={() => {
+                setSelected(record);
+                setIsUpdate(true);
+                setShowModal(true);
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Seleccione registro">
+            <img
+              src="src/assets/icons/delete.png"
+              alt={txt}
+              className="iconTable secouns-icon"
+              onClick={() => checkDelete(txt)}
+            />
+          </Tooltip>
+        </>
       ),
     },
   ];
@@ -125,12 +142,32 @@ const Vehicles = () => {
     getTypeVeh();
   }, []);
 
+  const checkDelete = (_id: string) => {
+    modal.confirm({
+      title: "¿Esta seguro que desea eliminar este vehiculo?",
+      onOk: () => deleteV(_id),
+    });
+  };
+
+  const deleteV = async (_id: string) => {
+    setLoading(true); // ==> Show loading
+    try {
+      await deleteVehicle(_id);
+      get();
+      getTypeVeh();
+    } catch (e) {
+      console.error("||* ==> Error getTypeVehicles <== *||", e);
+    }
+    setLoading(false); // ==> Hide loading
+  };
+
   return (
     <>
       {loading ? (
         <Loading />
       ) : (
         <Wrapper>
+          {contextHolder}
           <div className="title">
             <h1> Vehiculos </h1>
           </div>
@@ -196,6 +233,10 @@ const Wrapper = styled.div`
     justify-content: end;
     align-items: center;
     margin: 10px;
+  }
+
+  .secouns-icon {
+    margin-left: 10px;
   }
 `;
 export default Vehicles;

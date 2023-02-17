@@ -90,3 +90,27 @@ export const updateVehicle = async (_id: string, body: VehiclesRequest) => {
     return { ok: false };
   }
 };
+
+/**
+ * Method for delete a record
+ */
+export const deleteVehicle = async (_id: string) => {
+  try {
+    const result = await requestApi<VehiclesResponse[]>({
+      path: vehicles,
+      method: "DELETE",
+      concatUrl: _id,
+    });
+    const { ok, msg } = result;
+    if (ok) return { ok };
+    else return { ok, msg };
+  } catch (e) {
+    console.error("||* ==> Error <== *||", e);
+    alertNotification({
+      msm: "Error",
+      description: "Error al eliminar registro",
+      type: "error",
+    });
+    return { ok: false };
+  }
+};
