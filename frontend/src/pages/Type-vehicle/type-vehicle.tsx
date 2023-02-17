@@ -52,27 +52,23 @@ const TypeVehicles = () => {
       render: (txt: string) => <>{decimalFormat(txt)}</>,
     },
     {
-      title: "Actions",
-      dataIndex: "status",
+      title: "Acciones",
+      dataIndex: "_id",
       align: "center",
       with: 100,
       render: (txt: string, record: TypeVehicleResponse) => (
-        <>
-          {!txt && (
-            <Tooltip title="Seleccione registro">
-              <img
-                src="src/assets/icons/edit.png"
-                alt={txt}
-                className="iconTable"
-                onClick={() => {
-                  setSelected(record);
-                  setIsUpdate(true);
-                  setShowModal(true);
-                }}
-              />
-            </Tooltip>
-          )}
-        </>
+        <Tooltip title="Seleccione registro">
+          <img
+            src="src/assets/icons/edit.png"
+            alt={txt}
+            className="iconTable"
+            onClick={() => {
+              setSelected(record);
+              setIsUpdate(true);
+              setShowModal(true);
+            }}
+          />
+        </Tooltip>
       ),
     },
   ];

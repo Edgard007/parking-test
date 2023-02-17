@@ -43,7 +43,7 @@ export const getParking = async () => {
 };
 
 /**
- * Method for update a record
+ * Method for saving a new record
  */
 export const saveParking = async (body: ParkingRequest) => {
   try {
@@ -67,7 +67,7 @@ export const saveParking = async (body: ParkingRequest) => {
 };
 
 /**
- * Method for saving a new record
+ * Method for update a record
  */
 export const updateParking = async (_id: string, body: ParkingRequest) => {
   try {

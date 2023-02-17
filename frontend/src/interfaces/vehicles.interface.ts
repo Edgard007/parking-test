@@ -1,5 +1,9 @@
-export interface VehiclesResponse {
+export interface VehiclesRequest {
   numPlaca: string;
-  _id: string;
   entryDate: string;
+  type: string;
+}
+
+export interface VehiclesResponse extends VehiclesRequest {
+  _id: string;
 }

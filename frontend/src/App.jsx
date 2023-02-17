@@ -10,7 +10,7 @@ import Loading from "./components/Loading";
 // ==> Pages
 const Parking = lazy(() => import("./pages/Parking/parking"));
 const TypeVehicles = lazy(() => import("./pages/Type-vehicle/type-vehicle"));
-const Vehicles = lazy(() => import("./pages/Vehicles/Vehicles"));
+const Vehicles = lazy(() => import("./pages/Vehicles/vehicles"));
 const Error403 = lazy(() => import("./pages/Error/error403"));
 
 function App() {
