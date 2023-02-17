@@ -1,11 +1,11 @@
 import {
   Injectable,
   BadRequestException,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
+import { CommonService } from 'src/common/common.service';
 
 // ==> DTO
 import { CreateParkingDto } from './dto/create-parking.dto';
@@ -19,14 +19,24 @@ export class ParkingService {
   constructor(
     @InjectModel(Parking.name)
     private readonly parkingModel: Model<Parking>,
+    private readonly commonServ: CommonService,
   ) {}
 
-  async create(createParkingDto: CreateParkingDto) {
+  async create(dto: CreateParkingDto) {
+    // Check if there is an active record
+    const check = await this.findOne(dto?.numPlaca, false);
+
+    if (check && check?.endDate === '') {
+      throw new BadRequestException('There is an active registry');
+    }
+
     try {
-      const parking = await this.parkingModel.create(createParkingDto);
+      // ==> Save record
+      const save: CreateParkingDto = { ...dto, endDate: '' };
+      const parking = await this.parkingModel.create(save);
       return parking;
     } catch (err) {
-      this.handleExceptions(err);
+      this.commonServ.handleExceptions(err);
     }
   }
 
@@ -39,25 +49,35 @@ export class ParkingService {
       .select('-__v');
   }
 
-  async findOne(term: string) {
+  async findOne(term: string, exception: boolean = true) {
     let parking: Parking;
 
     if (isValidObjectId(term)) {
       parking = await this.parkingModel.findById(term);
     } else parking = await this.parkingModel.findOne({ numPlaca: term });
 
-    if (!parking) throw new NotFoundException();
+    if (!parking && exception) throw new NotFoundException();
 
     return parking;
   }
 
-  async update(term: string, updateParkingDto: UpdateParkingDto) {
+  async update(term: string, dto: UpdateParkingDto) {
     const parking = await this.findOne(term);
+
+    if (parking?.numPlaca !== dto?.numPlaca) {
+      // Check for registration with the same license plate number
+      const check = await this.findOne(dto?.numPlaca, false);
+
+      if (check) {
+        throw new BadRequestException('There is an active registry');
+      }
+    }
+
     try {
-      await parking.updateOne(updateParkingDto);
-      return { ...parking.toJSON(), ...updateParkingDto };
+      await parking.updateOne(dto);
+      return { ...parking.toJSON(), ...dto };
     } catch (err) {
-      this.handleExceptions(err);
+      this.commonServ.handleExceptions(err);
     }
   }
 
@@ -66,16 +86,5 @@ export class ParkingService {
 
     if (deletedCount === 0)
       throw new NotFoundException(`Parking with ID "${id} not found"`);
-  }
-
-  private handleExceptions(err: any) {
-    if (err?.code === 11000) {
-      throw new BadRequestException(
-        `Parking exists in DB ${JSON.stringify(err?.keyValue || '')}`,
-      );
-    }
-
-    console.error('|| ==> Error create <== ||', err);
-    throw new InternalServerErrorException('Check server logs');
   }
 }

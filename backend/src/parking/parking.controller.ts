@@ -17,6 +17,7 @@ import { ParkingService } from './parking.service';
 // ==> DTO's
 import { CreateParkingDto } from './dto/create-parking.dto';
 import { UpdateParkingDto } from './dto/update-parking.dto';
+import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id/parse-mongo-id.pipe';
 
 // ==> Pipes
 
@@ -49,7 +50,7 @@ export class ParkingController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseMongoIdPipe) id: string) {
     return this.parkingService.remove(id);
   }
 }

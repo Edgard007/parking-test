@@ -9,6 +9,8 @@ import { ParkingModule } from './parking/parking.module';
 
 // ==> Config
 import { JoiValidSchema } from './config/joi.validation';
+import { VehiclesModule } from './vehicles/vehicles.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { JoiValidSchema } from './config/joi.validation';
     }),
     MongooseModule.forRoot(process.env.MONGODB),
     ParkingModule,
+    VehiclesModule,
+    CommonModule,
   ],
 })
 export class AppModule {}
