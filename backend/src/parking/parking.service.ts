@@ -3,6 +3,9 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+
+import * as moment from 'moment';
+
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 
@@ -96,9 +99,16 @@ export class ParkingService {
     }
 
     try {
+      let cal: number;
+      if (dto?.endDate) {
+        // ==> Calcule amount
+        const amount = !type ? this.amount : type?.amount;
+        cal = this.calculate(amount, dto?.startDate, dto?.endDate);
+      }
+
       const payload: UpdateParkingDto = {
         ...dto,
-        amount: !type ? this.amount : type?.amount,
+        amount: cal || 0,
       };
 
       await parking.updateOne(payload);
@@ -113,5 +123,13 @@ export class ParkingService {
 
     if (deletedCount === 0)
       throw new NotFoundException(`Parking with ID ${id} not found`);
+  }
+
+  calculate(amount: number, start: string, end: string) {
+    const s = moment(start, 'DD/MM/YYYY HH:mm');
+    const e = moment(end, 'DD/MM/YYYY HH:mm');
+
+    const diff = e.diff(s, 'minutes');
+    return diff <= 0 ? 0 : diff * amount;
   }
 }
