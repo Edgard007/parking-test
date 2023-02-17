@@ -14,6 +14,9 @@ export class Parking extends Document {
 
   @Prop()
   endDate: string;
+
+  @Prop()
+  amount: number;
 }
 
 export const ParkingSchema = SchemaFactory.createForClass(Parking);

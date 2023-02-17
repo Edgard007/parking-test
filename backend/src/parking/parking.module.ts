@@ -1,6 +1,10 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 
+// ==> Modules
+import { VehiclesModule } from 'src/vehicles/vehicles.module';
+import { TypeVehicleModule } from 'src/type-vehicle/type-vehicle.module';
+
 // ==> Entity's
 import { Parking, ParkingSchema } from './entities/parking.entity';
 
@@ -21,6 +25,8 @@ import { ParkingController } from './parking.controller';
         schema: ParkingSchema,
       },
     ]),
+    VehiclesModule,
+    TypeVehicleModule,
   ],
   exports: [MongooseModule],
 })

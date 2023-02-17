@@ -11,6 +11,7 @@ import { ParkingModule } from './parking/parking.module';
 import { JoiValidSchema } from './config/joi.validation';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { CommonModule } from './common/common.module';
+import { TypeVehicleModule } from './type-vehicle/type-vehicle.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { CommonModule } from './common/common.module';
     ParkingModule,
     VehiclesModule,
     CommonModule,
+    TypeVehicleModule,
   ],
 })
 export class AppModule {}

@@ -1,4 +1,11 @@
-import { IsString, MinLength, IsOptional } from 'class-validator';
+import {
+  IsString,
+  MinLength,
+  IsOptional,
+  IsNumber,
+  IsNotEmpty,
+  Min,
+} from 'class-validator';
 
 export class CreateParkingDto {
   @IsString()
@@ -13,4 +20,10 @@ export class CreateParkingDto {
   @IsString()
   @MinLength(1)
   endDate?: string;
+
+  @IsOptional()
+  @IsNumber()
+  @IsNotEmpty()
+  @Min(0)
+  amount?: number;
 }

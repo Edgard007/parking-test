@@ -5,7 +5,12 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
+
+// ==> Services
 import { CommonService } from 'src/common/common.service';
+import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
+import { VehicleService } from 'src/vehicles/vehicles.service';
+import { TypeVehicleService } from 'src/type-vehicle/type-vehicle.service';
 
 // ==> DTO
 import { CreateParkingDto } from './dto/create-parking.dto';
@@ -13,13 +18,18 @@ import { UpdateParkingDto } from './dto/update-parking.dto';
 
 // ==> Entity
 import { Parking } from './entities/parking.entity';
+import { TypeVehicle } from 'src/type-vehicle/entities/type-vehicle.entity';
 
 @Injectable()
 export class ParkingService {
+  private readonly amount: number = 0.5;
+
   constructor(
     @InjectModel(Parking.name)
     private readonly parkingModel: Model<Parking>,
     private readonly commonServ: CommonService,
+    private readonly vehicleServ: VehicleService,
+    private readonly typeVehServ: TypeVehicleService,
   ) {}
 
   async create(dto: CreateParkingDto) {
@@ -32,7 +42,7 @@ export class ParkingService {
 
     try {
       // ==> Save record
-      const save: CreateParkingDto = { ...dto, endDate: '' };
+      const save: CreateParkingDto = { ...dto, endDate: '', amount: 0 };
       const parking = await this.parkingModel.create(save);
       return parking;
     } catch (err) {
@@ -73,9 +83,26 @@ export class ParkingService {
       }
     }
 
+    // ==> Search in registered vehicles
+    const vehicle: Vehicle = await this.vehicleServ.findOne(
+      dto?.numPlaca,
+      false,
+    );
+
+    let type: TypeVehicle;
+    if (vehicle) {
+      // Search vehicle type
+      type = await this.vehicleServ.searchTypeVeh(vehicle?.type);
+    }
+
     try {
-      await parking.updateOne(dto);
-      return { ...parking.toJSON(), ...dto };
+      const payload: UpdateParkingDto = {
+        ...dto,
+        amount: !type ? this.amount : type?.amount,
+      };
+
+      await parking.updateOne(payload);
+      return { ...parking.toJSON(), ...payload };
     } catch (err) {
       this.commonServ.handleExceptions(err);
     }
@@ -85,6 +112,6 @@ export class ParkingService {
     const { deletedCount } = await this.parkingModel.deleteOne({ _id: id });
 
     if (deletedCount === 0)
-      throw new NotFoundException(`Parking with ID "${id} not found"`);
+      throw new NotFoundException(`Parking with ID ${id} not found`);
   }
 }
